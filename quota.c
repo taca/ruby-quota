@@ -150,7 +150,6 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   uid_t uid;
 
   get_uid(vuid, &uid, &is_gid);
-  printf("cmd = %d, dev = %s, uid = %d, gid? = %d\n", cmd, dev, uid, is_gid);
   if( is_gid ){
     return quotactl(QCMD(cmd,GRPQUOTA),dev,(uid_t)uid,addr);
   }
