@@ -1,3 +1,24 @@
+2011-05-22  Takahiro Kambe  <tacahi>
+
+	* quota.c: Add support for statvfs(2).
+
+	* quota.c: portability fix not possing 0 but NULL, a comment in
+	  ticket #2887258 by ggarami.
+
+	* quota.c: Use StringValuePtr() instead of obsolete STR2CSTR().
+
+	* quota.c: Don't initialize auto variable which is strucure.
+
+	* quota.c: Add copyright notice.
+
+2011-05-17  Takahiro Kambe  <tacahi>
+
+	* quota.c: Remove printf() for debug.
+
+2011-04-02  Takahiro Kambe  <tacahi>
+
+	* extconf.rb: Add checking <unistd.h> and <sys/statvfs.h>
+
 Thu Feb 13 07:48:16 UTC 2003 Takaaki Tateishi <ttate@users.sourceforge.net>
 
 	* Detecting V0 quota format.
