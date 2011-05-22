@@ -222,7 +222,7 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 static int
 rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 {
-  struct quotctl qctl = {cmd, uid, addr};
+  struct quotctl qctl;
   int fd;
   uid_t uid;
 
@@ -251,6 +251,11 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   if( fd < 0 ){
     return -1;
   };
+
+  qctl.op = cmd;
+  qctl.uid = uid;
+  qctl.addr = addr;
+
   if( ioctl(fd,Q_QUOTACTL,&qctl) == -1 ){
     close(fd);
     return -1;
