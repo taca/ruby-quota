@@ -1,4 +1,5 @@
 /* -*- C -*-
+ *
  * $Id$
  *
  * Copyright (C) 2009, 2010, 2011
@@ -80,7 +81,13 @@
 #include <sys/param.h>
 #include <sys/mount.h>
 #if defined(SYS_UCRED_H)
-# include <sys/ucred.h>  /* required by NetBSD,FreeBSD */
+#  include <sys/ucred.h>  /* required by NetBSD,FreeBSD */
+#endif
+#if defined(__DragonFly__)
+#  include <sys/param.h>
+#  if __DragonFly_version >= 160000
+#    define dqblk ufs_dqblk
+#  endif
 #endif
 #endif
 
@@ -189,7 +196,11 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   char *path;
   int is_gid;
   uid_t uid;
+#if defined(HAVE_SYS_STATVFS_H) && !defined(__DragonFly__)
+  struct statvfs *buff;
+#else
   struct statfs *buff;
+#endif
   int i, count, ret;
   
   buff = 0;
