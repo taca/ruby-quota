@@ -29,11 +29,6 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * TODO:
- * - should use the allocation framework of ruby-1.8.x.
- */
-
 #include "ruby.h"
 
 #define RUBY_QUOTA_VERSION "0.6.0"
@@ -356,7 +351,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
 static VALUE
 rb_quota_getquota(VALUE self, VALUE dev, VALUE uid)
 {
-  char *c_dev = STR2CSTR(dev);
+  char *c_dev = StringValuePtr(dev);
   struct dqblk c_dqb;
   VALUE dqb = Qnil;
 
@@ -372,7 +367,7 @@ rb_quota_getquota(VALUE self, VALUE dev, VALUE uid)
 VALUE
 rb_quota_quotaoff(VALUE self, VALUE dev)
 {
-  char *c_dev = STR2CSTR(dev);
+  char *c_dev = StringValuePtr(dev);
 
   if( rb_quotactl(Q_QUOTAOFF,c_dev,Qnil,NULL) == -1 ){
     rb_sys_fail("quotactl");
@@ -384,8 +379,8 @@ rb_quota_quotaoff(VALUE self, VALUE dev)
 VALUE
 rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
 {
-  char *c_dev = STR2CSTR(dev);
-  char *c_quotas = STR2CSTR(quotas);
+  char *c_dev = StringValuePtr(dev);
+  char *c_quotas = StringValuePtr(quotas);
 
   if( rb_quotactl(Q_QUOTAON,c_dev,Qnil,(caddr_t)c_quotas) == -1 ){
     rb_sys_fail("quotactl");
@@ -397,7 +392,7 @@ rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
 VALUE
 rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
-  char *c_dev = STR2CSTR(dev);
+  char *c_dev = StringValuePtr(dev);
   struct dqblk c_dqb;
 
   rb_diskquota_get(dqb, &c_dqb);
@@ -413,7 +408,7 @@ VALUE
 rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
 #ifdef Q_SETQLIM
-  char *c_dev = STR2CSTR(dev);
+  char *c_dev = StringValuePtr(dev);
   struct dqblk c_dqb;
 
   rb_diskquota_get(dqb, &c_dqb);
@@ -440,7 +435,7 @@ rb_quota_sync(VALUE self, VALUE dev)
     c_dev = NULL;
   }
   else{
-    c_dev = STR2CSTR(dev);
+    c_dev = StringValuePtr(dev);
   };
 
   if( rb_quotactl(Q_SYNC,c_dev,Qnil,NULL) == -1 ){ /* uid and addr are ignored */
